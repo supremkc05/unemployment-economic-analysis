@@ -614,60 +614,81 @@ with col_left2:
     st.markdown("</div>", unsafe_allow_html=True)
 
 with col_right2:
-    # Donut chart - COVID recovery analysis
+    # Slope chart - COVID impact by development tier
     st.markdown("""
     <div class="chart-container">
-        <div class="chart-title">Unemployment rate across COVID timeline</div>
-        <div class="chart-subtitle">Donut chart · Period-wise average distribution</div>
+        <div class="chart-title">Youth unemployment trajectory by development tier</div>
+        <div class="chart-subtitle">Slope chart · COVID phase progression</div>
     """, unsafe_allow_html=True)
     
-    # Prepare data for donut chart
-    df_donut = df_filtered.groupby('covid_period')['unemployment_rate'].mean().reset_index()
-    df_donut = df_donut.sort_values('covid_period', 
-                                     key=lambda x: x.map({'Pre-COVID': 0, 'COVID Peak': 1, 
-                                                          'Recovery': 2, 'Post-COVID': 3}))
+    # Prepare data for slope chart - youth unemployment by dev tier and COVID period
+    df_slope = df_filtered[df_filtered['age_categories'] == 'Youth'].groupby(
+        ['covid_period', 'dev_tier']
+    )['unemployment_rate'].mean().reset_index()
     
-    # Create donut chart
-    fig_donut = go.Figure(data=[go.Pie(
-        labels=df_donut['covid_period'],
-        values=df_donut['unemployment_rate'],
-        hole=0.5,
-        marker=dict(
-            colors=['#51cf66', '#ff6b6b', '#ffa94d', '#5b9bd5'],
-            line=dict(color='#1f1f1f', width=2)
-        ),
-        textinfo='label+percent',
-        textposition='outside',
-        textfont=dict(color='#ffffff', size=12),
-        hovertemplate='<b>%{label}</b><br>Avg Rate: %{value:.1f}%<br>Share: %{percent}<extra></extra>'
-    )])
+    # Create slope chart
+    fig_slope = go.Figure()
     
-    # Add center text
-    fig_donut.add_annotation(
-        text=f"<b>{df_donut['unemployment_rate'].mean():.1f}%</b><br>Overall Avg",
-        x=0.5, y=0.5,
-        font=dict(size=16, color='#ffffff'),
-        showarrow=False,
-        align='center'
-    )
+    # Color mapping for development tiers
+    tier_colors = {
+        'Low Income': '#ff6b6b',
+        'Lower-Middle': '#ffa94d',
+        'Upper-Middle': '#5b9bd5',
+        'High Income': '#51cf66'
+    }
     
-    fig_donut.update_layout(
+    # Add a line for each development tier
+    for tier in ['Low Income', 'Lower-Middle', 'Upper-Middle', 'High Income']:
+        tier_data = df_slope[df_slope['dev_tier'] == tier].sort_values(
+            'covid_period',
+            key=lambda x: x.map({'Pre-COVID': 0, 'COVID Peak': 1, 'Recovery': 2, 'Post-COVID': 3})
+        )
+        
+        if not tier_data.empty:
+            fig_slope.add_trace(go.Scatter(
+                x=tier_data['covid_period'],
+                y=tier_data['unemployment_rate'],
+                mode='lines+markers+text',
+                name=tier,
+                line=dict(color=tier_colors[tier], width=3),
+                marker=dict(size=10, symbol='circle'),
+                text=[f'{val:.1f}%' for val in tier_data['unemployment_rate']],
+                textposition='top center',
+                textfont=dict(size=9, color=tier_colors[tier]),
+                hovertemplate='<b>%{fullData.name}</b><br>Period: %{x}<br>Rate: %{y:.1f}%<extra></extra>'
+            ))
+    
+    fig_slope.update_layout(
         plot_bgcolor='#1f1f1f',
         paper_bgcolor='#1f1f1f',
         font_color='#ffffff',
-        showlegend=True,
+        xaxis=dict(
+            showgrid=False,
+            title="",
+            categoryorder='array',
+            categoryarray=['Pre-COVID', 'COVID Peak', 'Recovery', 'Post-COVID'],
+            tickfont=dict(size=10)
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='#3a3a3a',
+            title=dict(text="Youth Unemployment Rate (%)", font=dict(size=11, color='#ffffff')),
+            tickfont=dict(size=10)
+        ),
         legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=-0.15,
-            xanchor="center",
-            x=0.5
+            orientation="v",
+            yanchor="middle",
+            y=0.5,
+            xanchor="right",
+            x=1.15,
+            font=dict(size=10)
         ),
         height=400,
-        margin=dict(l=20, r=20, t=20, b=20)
+        margin=dict(l=20, r=80, t=20, b=20),
+        hovermode='closest'
     )
     
-    st.plotly_chart(fig_donut, use_container_width=True)
+    st.plotly_chart(fig_slope, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 # Third row - 2 columns
