@@ -97,27 +97,27 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
-    /* Sidebar styling with ocean blue */
+    /* Sidebar styling with black theme */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0c4a6e 0%, #075985 100%);
-        border-right: 3px solid #0891b2;
+        background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%);
+        border-right: 3px solid #333333;
     }
     
     section[data-testid="stSidebar"] .stMarkdown {
-        color: #e0f2fe;
+        color: #e0e0e0;
     }
     
     section[data-testid="stSidebar"] h3 {
-        color: #67e8f9;
+        color: #ffffff;
         font-weight: 700;
     }
     
     section[data-testid="stSidebar"] p {
-        color: #cffafe;
+        color: #b0b0b0;
     }
     
     section[data-testid="stSidebar"] hr {
-        border-color: rgba(103, 232, 249, 0.2);
+        border-color: rgba(255, 255, 255, 0.15);
     }
     
     /* Filter section headers */
