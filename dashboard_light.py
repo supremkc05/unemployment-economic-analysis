@@ -127,25 +127,34 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* Sidebar styling with modern gradient */
+    /* Sidebar styling with ocean blue gradient */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 100%);
-        border-right: 2px solid #90caf9;
+        background: linear-gradient(180deg, #006994 0%, #004d6d 100%);
+        border-right: 3px solid #0891b2;
     }
     
     section[data-testid="stSidebar"] .stMarkdown {
-        color: #2d3748;
+        color: #ffffff;
     }
     
     section[data-testid="stSidebar"] h3 {
-        color: #1a365d;
+        color: #ffffff;
         font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    section[data-testid="stSidebar"] p {
+        color: #cffafe;
+    }
+    
+    section[data-testid="stSidebar"] hr {
+        border-color: rgba(255, 255, 255, 0.2);
     }
     
     /* Filter section headers */
     .filter-header {
         font-size: 0.8rem;
-        color: #4a5568;
+        color: #e2e8f0;
         text-transform: uppercase;
         letter-spacing: 1.2px;
         margin-top: 1.8rem;
@@ -949,77 +958,54 @@ with col2:
 # Gender Equity Progress Chart - Full width at the end
 st.markdown("""
 <div class="chart-container">
-    <div class="chart-title">Gender equity progress tracker by development tier</div>
-    <div class="chart-subtitle">Gender gap evolution · Positive = Female disadvantage · Negative = Male disadvantage · Target: Zero gap</div>
+    <div class="chart-title">Gender equity progress tracker</div>
+    <div class="chart-subtitle">Tracking unemployment gap between women and men · SDG 8.5: Equal pay for work of equal value</div>
 """, unsafe_allow_html=True)
 
-# Calculate gender gap by development tier (Female - Male unemployment rate)
-df_equity = df_filtered.groupby(['year', 'dev_tier', 'sex'])['unemployment_rate'].mean().reset_index()
-df_equity_pivot = df_equity.pivot_table(
-    index=['year', 'dev_tier'], 
-    columns='sex', 
-    values='unemployment_rate'
-).reset_index()
+# Calculate gender gap (Female - Male unemployment rate)
+df_equity = df_filtered.groupby(['year', 'sex'])['unemployment_rate'].mean().reset_index()
+df_equity_pivot = df_equity.pivot(index='year', columns='sex', values='unemployment_rate').reset_index()
 df_equity_pivot['gender_gap'] = df_equity_pivot['Female'] - df_equity_pivot['Male']
 
-# Create line chart with tier breakdown
+# Create line chart
 fig_equity = go.Figure()
 
-# Color mapping for development tiers
-tier_colors = {
-    'Low Income': '#ff6b6b',
-    'Lower-Middle': '#ffa94d',
-    'Upper-Middle': '#5b9bd5',
-    'High Income': '#51cf66'
-}
-
-# Add a line for each development tier
-for tier in ['Low Income', 'Lower-Middle', 'Upper-Middle', 'High Income']:
-    tier_data = df_equity_pivot[df_equity_pivot['dev_tier'] == tier].sort_values('year')
-    
-    if not tier_data.empty:
-        # Calculate trend direction
-        first_gap = tier_data['gender_gap'].iloc[0]
-        last_gap = tier_data['gender_gap'].iloc[-1]
-        trend = "improving" if abs(last_gap) < abs(first_gap) else "worsening"
-        
-        fig_equity.add_trace(go.Scatter(
-            x=tier_data['year'],
-            y=tier_data['gender_gap'],
-            mode='lines+markers',
-            name=f'{tier} ({trend})',
-            line=dict(color=tier_colors[tier], width=3),
-            marker=dict(size=8, symbol='circle'),
-            hovertemplate=(
-                f'<b>{tier}</b><br>' +
-                'Year: %{x}<br>' +
-                'Gender Gap: %{y:.2f}pp<br>' +
-                '(Female - Male)<extra></extra>'
-            )
-        ))
+# Add gender gap line with gradient effect
+fig_equity.add_trace(go.Scatter(
+    x=df_equity_pivot['year'],
+    y=df_equity_pivot['gender_gap'],
+    mode='lines+markers',
+    name='Gender Gap',
+    line=dict(color='#7C3AED', width=4, shape='spline'),
+    marker=dict(size=12, symbol='circle', color='#7C3AED', 
+                line=dict(color='#ffffff', width=2)),
+    fill='tozeroy',
+    fillcolor='rgba(124, 58, 237, 0.2)',
+    hovertemplate='<b>Year: %{x}</b><br>Gender Gap: %{y:.2f}pp<br>(Female - Male unemployment)<extra></extra>'
+))
 
 # Add zero reference line (equity target)
 fig_equity.add_hline(
     y=0, 
     line_dash="dash", 
     line_color="#2d3748", 
-    line_width=2,
-    annotation_text="Equity Target (Zero Gap)",
+    line_width=3,
+    annotation_text="⚖ Equity Target",
     annotation_position="right",
-    annotation=dict(font=dict(size=11, color='#2d3748', weight='bold'))
+    annotation=dict(font=dict(size=12, color='#2d3748', weight='bold'))
 )
 
-# Add COVID period shading
+# Add COVID period shading with better visibility
 fig_equity.add_vrect(
     x0=2020, x1=2022,
-    fillcolor="red", opacity=0.05,
+    fillcolor="#ff6b6b", opacity=0.12,
     line_width=0,
-    annotation_text="COVID Impact",
+    annotation_text="COVID-19 Period",
     annotation_position="top left",
-    annotation=dict(font_color="#2d3748", font_size=10)
+    annotation=dict(font_color="#c92a2a", font_size=11, font_weight='bold')
 )
 
-# Add interpretation zones
+# Add zone labels for interpretation
 max_gap = df_equity_pivot['gender_gap'].max()
 min_gap = df_equity_pivot['gender_gap'].min()
 
@@ -1027,24 +1013,24 @@ if max_gap > 0:
     fig_equity.add_annotation(
         x=2024,
         y=max_gap * 0.7,
-        text="Female Disadvantage Zone",
+        text="↑ Female Disadvantage",
         showarrow=False,
-        font=dict(size=10, color='#718096', style='italic'),
+        font=dict(size=11, color='#718096', weight='bold'),
         xanchor='right',
         bgcolor='rgba(255, 107, 107, 0.1)',
-        borderpad=4
+        borderpad=6
     )
 
 if min_gap < 0:
     fig_equity.add_annotation(
         x=2024,
         y=min_gap * 0.7,
-        text="Male Disadvantage Zone",
+        text="↓ Male Disadvantage",
         showarrow=False,
-        font=dict(size=10, color='#718096', style='italic'),
+        font=dict(size=11, color='#718096', weight='bold'),
         xanchor='right',
         bgcolor='rgba(81, 207, 102, 0.1)',
-        borderpad=4
+        borderpad=6
     )
 
 fig_equity.update_layout(
@@ -1067,22 +1053,12 @@ fig_equity.update_layout(
         tickfont=dict(color='#4a5568', size=11),
         zeroline=True,
         zerolinecolor='#2d3748',
-        zerolinewidth=2
+        zerolinewidth=3
     ),
-    legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=1.02,
-        xanchor="center",
-        x=0.5,
-        font=dict(color='#2d3748', size=11),
-        bgcolor='rgba(255, 255, 255, 0.9)',
-        bordercolor='#cbd5e0',
-        borderwidth=1
-    ),
+    showlegend=False,
     hovermode='x unified',
-    height=450,
-    margin=dict(l=20, r=20, t=60, b=20)
+    height=400,
+    margin=dict(l=20, r=20, t=20, b=20)
 )
 
 st.plotly_chart(fig_equity, use_container_width=True)
@@ -1091,13 +1067,14 @@ st.plotly_chart(fig_equity, use_container_width=True)
 col_insight1, col_insight2, col_insight3 = st.columns(3)
 
 # Calculate key metrics
-overall_2024 = df_equity_pivot[df_equity_pivot['year'] == 2024]['gender_gap'].mean()
-overall_2014 = df_equity_pivot[df_equity_pivot['year'] == 2014]['gender_gap'].mean()
+overall_2024 = df_equity_pivot[df_equity_pivot['year'] == 2024]['gender_gap'].iloc[0]
+overall_2014 = df_equity_pivot[df_equity_pivot['year'] == 2014]['gender_gap'].iloc[0]
 change = overall_2024 - overall_2014
+progress_status = "Improving" if abs(overall_2024) < abs(overall_2014) else "Worsening"
 
 with col_insight1:
     st.markdown(f"""
-    <div style="background: rgba(233, 30, 99, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #E91E63;">
+    <div style="background: rgba(124, 58, 237, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #7C3AED;">
         <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">Current Gap (2024)</div>
         <div style="font-size: 1.8rem; font-weight: bold; color: #2d3748;">{overall_2024:+.2f}pp</div>
         <div style="font-size: 0.8rem; color: #718096;">{'Women face higher unemployment' if overall_2024 > 0 else 'Men face higher unemployment'}</div>
@@ -1107,22 +1084,21 @@ with col_insight1:
 with col_insight2:
     st.markdown(f"""
     <div style="background: rgba(21, 101, 192, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #1565C0;">
-        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">10-Year Change</div>
-        <div style="font-size: 1.8rem; font-weight: bold; color: #2d3748;">{change:+.2f}pp</div>
-        <div style="font-size: 0.8rem; color: #718096;">{'Gap widening' if abs(change) > 0.1 else 'Relatively stable'}</div>
+        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">10-Year Trend</div>
+        <div style="font-size: 1.8rem; font-weight: bold; color: #2d3748;">{progress_status}</div>
+        <div style="font-size: 0.8rem; color: #718096;">Change: {change:+.2f}pp since 2014</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col_insight3:
-    # Find most equitable tier
-    tier_gaps_2024 = df_equity_pivot[df_equity_pivot['year'] == 2024].groupby('dev_tier')['gender_gap'].mean()
-    most_equitable = tier_gaps_2024.abs().idxmin()
+    # Calculate distance from equity
+    distance_from_equity = abs(overall_2024)
     
     st.markdown(f"""
     <div style="background: rgba(81, 207, 102, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #51cf66;">
-        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">Most Equitable Tier</div>
-        <div style="font-size: 1.3rem; font-weight: bold; color: #2d3748;">{most_equitable}</div>
-        <div style="font-size: 0.8rem; color: #718096;">Gap: {tier_gaps_2024[most_equitable]:+.2f}pp</div>
+        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">Distance from Equity</div>
+        <div style="font-size: 1.8rem; font-weight: bold; color: #2d3748;">{distance_from_equity:.2f}pp</div>
+        <div style="font-size: 0.8rem; color: #718096;">{'Close to equity' if distance_from_equity < 1 else 'Needs improvement'}</div>
     </div>
     """, unsafe_allow_html=True)
 

@@ -97,20 +97,33 @@ st.markdown("""
         margin-bottom: 1rem;
     }
     
-    /* Sidebar styling */
+    /* Sidebar styling with ocean blue */
     section[data-testid="stSidebar"] {
-        background-color: #1f1f1f;
-        border-right: 1px solid #3a3a3a;
+        background: linear-gradient(180deg, #0c4a6e 0%, #075985 100%);
+        border-right: 3px solid #0891b2;
     }
     
     section[data-testid="stSidebar"] .stMarkdown {
-        color: #ffffff;
+        color: #e0f2fe;
+    }
+    
+    section[data-testid="stSidebar"] h3 {
+        color: #67e8f9;
+        font-weight: 700;
+    }
+    
+    section[data-testid="stSidebar"] p {
+        color: #cffafe;
+    }
+    
+    section[data-testid="stSidebar"] hr {
+        border-color: rgba(103, 232, 249, 0.2);
     }
     
     /* Filter section headers */
     .filter-header {
         font-size: 0.85rem;
-        color: #a0a0a0;
+        color: #cbd5e0;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-top: 1.5rem;
@@ -846,16 +859,17 @@ df_equity_pivot['gender_gap'] = df_equity_pivot['Female'] - df_equity_pivot['Mal
 # Create line chart
 fig_equity = go.Figure()
 
-# Add gender gap line with area fill
+# Add gender gap line with gradient effect
 fig_equity.add_trace(go.Scatter(
     x=df_equity_pivot['year'],
     y=df_equity_pivot['gender_gap'],
     mode='lines+markers',
     name='Gender Gap',
-    line=dict(color='#E91E63', width=4),
-    marker=dict(size=10, symbol='circle'),
+    line=dict(color='#9C27B0', width=4, shape='spline'),
+    marker=dict(size=12, symbol='circle', color='#9C27B0', 
+                line=dict(color='#ffffff', width=2)),
     fill='tozeroy',
-    fillcolor='rgba(233, 30, 99, 0.15)',
+    fillcolor='rgba(156, 39, 176, 0.2)',
     hovertemplate='<b>Year: %{x}</b><br>Gender Gap: %{y:.2f}pp<br>(Female - Male unemployment)<extra></extra>'
 ))
 
@@ -870,15 +884,43 @@ fig_equity.add_hline(
     annotation=dict(font=dict(size=12, color='#ffffff', weight='bold'))
 )
 
-# Add COVID period shading
+# Add COVID period shading with better visibility
 fig_equity.add_vrect(
     x0=2020, x1=2022,
-    fillcolor="red", opacity=0.1,
+    fillcolor="#ff6b6b", opacity=0.15,
     line_width=0,
-    annotation_text="COVID-19",
+    annotation_text="COVID-19 Period",
     annotation_position="top left",
-    annotation=dict(font_color="#ffffff", font_size=10)
+    annotation=dict(font_color="#ff8787", font_size=11, font_weight='bold')
 )
+
+# Add zone labels for interpretation
+max_gap = df_equity_pivot['gender_gap'].max()
+min_gap = df_equity_pivot['gender_gap'].min()
+
+if max_gap > 0:
+    fig_equity.add_annotation(
+        x=2024,
+        y=max_gap * 0.7,
+        text="↑ Female Disadvantage",
+        showarrow=False,
+        font=dict(size=11, color='#a0a0a0', weight='bold'),
+        xanchor='right',
+        bgcolor='rgba(255, 107, 107, 0.15)',
+        borderpad=6
+    )
+
+if min_gap < 0:
+    fig_equity.add_annotation(
+        x=2024,
+        y=min_gap * 0.7,
+        text="↓ Male Disadvantage",
+        showarrow=False,
+        font=dict(size=11, color='#a0a0a0', weight='bold'),
+        xanchor='right',
+        bgcolor='rgba(81, 207, 102, 0.15)',
+        borderpad=6
+    )
 
 fig_equity.update_layout(
     plot_bgcolor='#1f1f1f',
@@ -921,7 +963,7 @@ progress_status = "Improving" if abs(overall_2024) < abs(overall_2014) else "Wor
 
 with col_insight1:
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%); padding: 1rem; border-radius: 8px; border-left: 4px solid #E91E63;">
+    <div style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%); padding: 1rem; border-radius: 8px; border-left: 4px solid #9C27B0;">
         <div style="font-size: 0.85rem; color: #a0a0a0; margin-bottom: 0.3rem;">Current Gap (2024)</div>
         <div style="font-size: 1.8rem; font-weight: bold; color: #ffffff;">{overall_2024:+.2f}pp</div>
         <div style="font-size: 0.8rem; color: #a0a0a0;">{'Women face higher unemployment' if overall_2024 > 0 else 'Men face higher unemployment'}</div>
