@@ -10,116 +10,177 @@ st.set_page_config(
     page_title="SDG 8 — Global Unemployment Dashboard",
 )
 
-# Custom CSS for dark theme
+# Custom CSS for light theme
 st.markdown("""
     <style>
-    /* Dark theme */
+    /* Light theme with gradient background */
     .stApp {
-        background-color: #1a1a1a;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     }
     
-    /* Header styling */
+    /* Header styling with modern gradient */
     .main-header {
-        font-size: 2.2rem;
-        font-weight: bold;
-        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         margin-bottom: 0.3rem;
         text-align: center;
-        text-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        letter-spacing: -0.5px;
     }
     
     .sub-header {
-        font-size: 0.95rem;
-        color: #b0b0b0;
+        font-size: 1rem;
+        color: #5a6c7d;
         margin-bottom: 0;
         text-align: center;
+        font-weight: 500;
     }
     
     .header-container {
-        background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
-        padding: 1rem 2rem;
-        border-radius: 8px;
-        border: 1px solid #3a3a3a;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+        padding: 1.8rem 2rem;
+        border-radius: 16px;
+        border: 2px solid #90caf9;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        backdrop-filter: blur(4px);
     }
     
-    /* KPI cards */
+    /* KPI cards with glassmorphism effect */
     .kpi-card {
-        background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid #3a3a3a;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 1.8rem 1.5rem;
+        border-radius: 16px;
+        border: 2px solid rgba(144, 202, 249, 0.5);
         height: 100%;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .kpi-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+        border-color: #64b5f6;
     }
     
     .kpi-title {
-        font-size: 0.9rem;
-        color: #a0a0a0;
-        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+        color: #5a6c7d;
+        margin-bottom: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
     }
     
     .kpi-value {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #ffffff;
-        margin-bottom: 0.3rem;
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+        line-height: 1;
     }
     
     .kpi-delta {
         font-size: 0.85rem;
-        color: #ff6b6b;
+        color: #e53e3e;
+        font-weight: 500;
     }
     
     .kpi-delta.positive {
-        color: #51cf66;
+        color: #38a169;
     }
     
-    /* Chart containers */
+    /* Chart containers with modern design */
     .chart-container {
-        background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
-        padding: 1.5rem;
-        border-radius: 12px;
-        border: 1px solid #3a3a3a;
-        margin-bottom: 1rem;
+        background: #ffffff;
+        padding: 2rem 1.8rem;
+        border-radius: 20px;
+        border: none;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 10px 40px rgba(31, 38, 135, 0.12);
+        transition: all 0.3s ease;
+    }
+    
+    .chart-container:hover {
+        box-shadow: 0 15px 50px rgba(31, 38, 135, 0.18);
     }
     
     .chart-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: #ffffff;
-        margin-bottom: 0.3rem;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 0.4rem;
+        letter-spacing: -0.3px;
     }
     
     .chart-subtitle {
         font-size: 0.9rem;
-        color: #a0a0a0;
-        margin-bottom: 1rem;
+        color: #1565C0;
+        margin-bottom: 1.2rem;
+        font-weight: 500;
     }
     
-    /* Sidebar styling */
+    /* Sidebar styling with modern gradient */
     section[data-testid="stSidebar"] {
-        background-color: #1f1f1f;
-        border-right: 1px solid #3a3a3a;
+        background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 100%);
+        border-right: 2px solid #90caf9;
     }
     
     section[data-testid="stSidebar"] .stMarkdown {
-        color: #ffffff;
+        color: #2d3748;
+    }
+    
+    section[data-testid="stSidebar"] h3 {
+        color: #1a365d;
+        font-weight: 700;
     }
     
     /* Filter section headers */
     .filter-header {
-        font-size: 0.85rem;
-        color: #a0a0a0;
+        font-size: 0.8rem;
+        color: #4a5568;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-top: 1.5rem;
-        margin-bottom: 0.5rem;
+        letter-spacing: 1.2px;
+        margin-top: 1.8rem;
+        margin-bottom: 0.8rem;
+        font-weight: 700;
+    }
+    
+    /* Streamlit widget styling */
+    .stSlider > div > div > div {
+        background: linear-gradient(90deg, #1565C0 0%, #0D47A1 100%);
     }
     
     /* Hide streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #e3f2fd;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #1565C0 0%, #0D47A1 100%);
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #0D47A1 0%, #1565C0 100%);
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -178,19 +239,16 @@ with st.sidebar:
     st.markdown("Data: ILO + World Bank | 185 countries | 2014–2024")
 
 # Apply filters
-# Handle age filter
 if age_filter == 'Both':
     age_list = ['Youth', 'Adults']
 else:
     age_list = [age_filter]
 
-# Handle COVID filter
 if covid_filter == 'All periods':
     covid_list = ['Pre-COVID', 'COVID Peak', 'Recovery', 'Post-COVID']
 else:
     covid_list = [covid_filter]
 
-# Include all sex and development tiers (no filter)
 sex_list = ['Male', 'Female']
 dev_tier_list = ['Low Income', 'Lower-Middle', 'Upper-Middle', 'High Income']
 
@@ -341,29 +399,35 @@ with col_left:
         line_width=0,
         annotation_text="COVID",
         annotation_position="top left",
-        annotation=dict(font_color="white")
+        annotation=dict(font_color="#1a1a1a")
     )
     
     fig_trend.update_layout(
-        plot_bgcolor='#1f1f1f',
-        paper_bgcolor='#1f1f1f',
-        font_color='#ffffff',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font_color='#2d3748',
         xaxis=dict(
             showgrid=True,
-            gridcolor='#3a3a3a',
-            tickvals=list(range(2014, 2025))
+            gridcolor='rgba(203, 213, 224, 0.5)',
+            tickvals=list(range(2014, 2025)),
+            tickfont=dict(color='#4a5568', size=11)
         ),
         yaxis=dict(
             showgrid=True,
-            gridcolor='#3a3a3a',
-            title=""
+            gridcolor='rgba(203, 213, 224, 0.5)',
+            title="",
+            tickfont=dict(color='#4a5568', size=11)
         ),
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
-            x=1
+            x=1,
+            font=dict(color='#2d3748', size=11),
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#cbd5e0',
+            borderwidth=1
         ),
         hovermode='x unified',
         margin=dict(l=20, r=20, t=40, b=20),
@@ -383,10 +447,8 @@ with col_right:
     
     df_covid = df_filtered.groupby(['covid_period', 'age_categories'])['unemployment_rate'].mean().reset_index()
     
-    # Create figure with secondary y-axis
     fig_covid = go.Figure()
     
-    # Add stacked bars with labels
     for age_cat in ['Adults', 'Youth']:
         age_data = df_covid[df_covid['age_categories'] == age_cat]
         color = '#5b9bd5' if age_cat == 'Adults' else '#ff6b6b'
@@ -398,13 +460,11 @@ with col_right:
             marker_color=color,
             text=[f'{val:.1f}%' for val in age_data['unemployment_rate']],
             textposition='inside',
-            textfont=dict(color='white', size=11)
+            textfont=dict(color='black', size=11)
         ))
     
-    # Calculate total for line
     df_total = df_covid.groupby('covid_period')['unemployment_rate'].sum().reset_index()
     
-    # Add line for total with labels
     fig_covid.add_trace(go.Scatter(
         x=df_total['covid_period'],
         y=df_total['unemployment_rate'],
@@ -419,34 +479,41 @@ with col_right:
     ))
     
     fig_covid.update_layout(
-        plot_bgcolor='#1f1f1f',
-        paper_bgcolor='#1f1f1f',
-        font_color='#ffffff',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font_color='#2d3748',
         barmode='stack',
         xaxis=dict(
             showgrid=False,
             title="",
             categoryorder='array',
-            categoryarray=['Pre-COVID', 'COVID Peak', 'Recovery', 'Post-COVID']
+            categoryarray=['Pre-COVID', 'COVID Peak', 'Recovery', 'Post-COVID'],
+            tickfont=dict(color='#4a5568', size=11)
         ),
         yaxis=dict(
             showgrid=True,
-            gridcolor='#3a3a3a',
-            title="Unemployment Rate (%)",
-            side='left'
+            gridcolor='rgba(203, 213, 224, 0.5)',
+            title=dict(text="Unemployment Rate (%)", font=dict(color='#2d3748', size=12)),
+            side='left',
+            tickfont=dict(color='#4a5568', size=11)
         ),
         yaxis2=dict(
             showgrid=False,
             title="",
             overlaying='y',
-            side='right'
+            side='right',
+            tickfont=dict(color='#4a5568', size=11)
         ),
         legend=dict(
             orientation="h",
             yanchor="bottom",
             y=1.02,
             xanchor="right",
-            x=1
+            x=1,
+            font=dict(color='#2d3748', size=11),
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#cbd5e0',
+            borderwidth=1
         ),
         height=350,
         margin=dict(l=20, r=20, t=40, b=20)
@@ -487,7 +554,6 @@ severity_colors = {
     "Severe": "#ff6b6b"
 }
 
-# Create choropleth map with colored regions
 fig_map = px.choropleth(
     df_map,
     locations='country_name',
@@ -503,19 +569,23 @@ fig_map = px.choropleth(
 )
 
 fig_map.update_layout(
-    plot_bgcolor='#1f1f1f',
-    paper_bgcolor='#1f1f1f',
-    font_color='#ffffff',
+    plot_bgcolor='#ffffff',
+    paper_bgcolor='#ffffff',
+    font_color='#2d3748',
     geo=dict(
-        bgcolor='#1f1f1f',
+        bgcolor='#ffffff',
         showframe=True,
+        framecolor='#1565C0',
+        framewidth=2,
         showcoastlines=True,
-        coastlinecolor='#4a4a4a',
+        coastlinecolor='#cbd5e0',
         showcountries=True,
-        countrycolor='#4a4a4a',
+        countrycolor='#cbd5e0',
         countrywidth=0.5,
         showland=True,
-        landcolor='#2d2d2d',
+        landcolor='#f8f9fa',
+        showocean=True,
+        oceancolor='#ffffff',
         projection_type='natural earth'
     ),
     legend=dict(
@@ -523,13 +593,16 @@ fig_map.update_layout(
         yanchor="top",
         y=-0.05,
         xanchor="center",
-        x=0.5
+        x=0.5,
+        font=dict(color='#2d3748', size=11),
+        bgcolor='rgba(255, 255, 255, 0.8)',
+        bordercolor='#cbd5e0',
+        borderwidth=1
     ),
     margin=dict(l=0, r=0, t=0, b=0),
     height=450
 )
 
-# Add text labels for major countries
 major_countries = {
     'United States': (37.0902, -95.7129),
     'China': (35.8617, 104.1954),
@@ -558,7 +631,6 @@ major_countries = {
     'Vietnam': (14.0583, 108.2772)
 }
 
-# Add country labels for countries in the dataset
 for country, (lat, lon) in major_countries.items():
     if country in df_map['country_name'].values:
         fig_map.add_trace(go.Scattergeo(
@@ -566,7 +638,7 @@ for country, (lat, lon) in major_countries.items():
             lat=[lat],
             text=country,
             mode='text',
-            textfont=dict(size=7, color='white', family='Arial'),
+            textfont=dict(size=7, color='#1a1a1a', family='Arial'),
             showlegend=False,
             hoverinfo='skip'
         ))
@@ -598,12 +670,31 @@ with col_left2:
     )
     
     fig_gender.update_layout(
-        plot_bgcolor='#1f1f1f',
-        paper_bgcolor='#1f1f1f',
-        font_color='#ffffff',
-        xaxis=dict(showgrid=False, title=""),
-        yaxis=dict(showgrid=True, gridcolor='#3a3a3a', title="Unemployment Rate (%)"),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font_color='#2d3748',
+        xaxis=dict(
+            showgrid=False,
+            title="",
+            tickfont=dict(color='#4a5568', size=11)
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='rgba(203, 213, 224, 0.5)',
+            title=dict(text="Unemployment Rate (%)", font=dict(color='#2d3748', size=12)),
+            tickfont=dict(color='#4a5568', size=11)
+        ),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1,
+            font=dict(color='#2d3748', size=11),
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#cbd5e0',
+            borderwidth=1
+        ),
         height=400,
         margin=dict(l=20, r=20, t=40, b=20)
     )
@@ -659,21 +750,21 @@ with col_right2:
             ))
     
     fig_slope.update_layout(
-        plot_bgcolor='#1f1f1f',
-        paper_bgcolor='#1f1f1f',
-        font_color='#ffffff',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font_color='#2d3748',
         xaxis=dict(
             showgrid=False,
             title="",
             categoryorder='array',
             categoryarray=['Pre-COVID', 'COVID Peak', 'Recovery', 'Post-COVID'],
-            tickfont=dict(size=10)
+            tickfont=dict(size=10, color='#4a5568')
         ),
         yaxis=dict(
             showgrid=True,
-            gridcolor='#3a3a3a',
-            title=dict(text="Youth Unemployment Rate (%)", font=dict(size=11, color='#ffffff')),
-            tickfont=dict(size=10)
+            gridcolor='rgba(203, 213, 224, 0.5)',
+            title=dict(text="Youth Unemployment Rate (%)", font=dict(size=11, color='#2d3748')),
+            tickfont=dict(size=10, color='#4a5568')
         ),
         legend=dict(
             orientation="v",
@@ -681,7 +772,10 @@ with col_right2:
             y=0.5,
             xanchor="right",
             x=1.15,
-            font=dict(size=10)
+            font=dict(size=10, color='#2d3748'),
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#cbd5e0',
+            borderwidth=1
         ),
         height=400,
         margin=dict(l=20, r=80, t=20, b=20),
@@ -740,12 +834,32 @@ with col1:
     fig_bubble.add_vline(x=0, line_dash="dash", line_color="gray", opacity=0.5)
     
     fig_bubble.update_layout(
-        plot_bgcolor='#1f1f1f',
-        paper_bgcolor='#1f1f1f',
-        font_color='#ffffff',
-        xaxis=dict(showgrid=True, gridcolor='#3a3a3a', title=""),
-        yaxis=dict(showgrid=True, gridcolor='#3a3a3a', title=""),
-        legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font_color='#2d3748',
+        xaxis=dict(
+            showgrid=True,
+            gridcolor='rgba(203, 213, 224, 0.5)',
+            title="",
+            tickfont=dict(color='#4a5568', size=11)
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='rgba(203, 213, 224, 0.5)',
+            title="",
+            tickfont=dict(color='#4a5568', size=11)
+        ),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.2,
+            xanchor="center",
+            x=0.5,
+            font=dict(color='#2d3748', size=11),
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#cbd5e0',
+            borderwidth=1
+        ),
         height=350,
         margin=dict(l=20, r=20, t=40, b=20)
     )
@@ -788,15 +902,14 @@ with col2:
     df_pivot = df_heat.pivot(index='country_name', columns='year', values='ratio')
     df_pivot = df_pivot.reindex(df_pivot.mean(axis=1).sort_values(ascending=False).index)
     
-    # Create professional heatmap with correct color pattern
     fig_heat = go.Figure(data=go.Heatmap(
         z=df_pivot.values,
         x=df_pivot.columns,
         y=df_pivot.index,
-        colorscale=[[0, '#51cf66'], [1, '#ff6b6b']],  # Green -> Red
+        colorscale=[[0, '#51cf66'], [1, '#ff6b6b']],
         text=np.round(df_pivot.values, 1),
         texttemplate='%{text}x',
-        textfont={"size": 10, "color": "white"},
+        textfont={"size": 10, "color": "black"},
         colorbar=dict(
             title=dict(text="Ratio", side="right"),
             tickmode="linear",
@@ -809,20 +922,22 @@ with col2:
     ))
     
     fig_heat.update_layout(
-        plot_bgcolor='#1f1f1f',
-        paper_bgcolor='#1f1f1f',
-        font_color='#ffffff',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font_color='#2d3748',
         xaxis=dict(
-            title="Year",
+            title=dict(text="Year", font=dict(color='#2d3748', size=12)),
             tickmode='linear',
             tick0=2014,
             dtick=2,
             side='bottom',
-            showgrid=False
+            showgrid=False,
+            tickfont=dict(color='#4a5568', size=11)
         ),
         yaxis=dict(
-            title="Country",
-            showgrid=False
+            title=dict(text="Country", font=dict(color='#2d3748', size=12)),
+            showgrid=False,
+            tickfont=dict(color='#4a5568', size=11)
         ),
         height=350,
         margin=dict(l=20, r=20, t=20, b=20)
@@ -834,78 +949,140 @@ with col2:
 # Gender Equity Progress Chart - Full width at the end
 st.markdown("""
 <div class="chart-container">
-    <div class="chart-title">Gender equity progress tracker</div>
-    <div class="chart-subtitle">Tracking unemployment gap between women and men · SDG 8.5: Equal pay for work of equal value</div>
+    <div class="chart-title">Gender equity progress tracker by development tier</div>
+    <div class="chart-subtitle">Gender gap evolution · Positive = Female disadvantage · Negative = Male disadvantage · Target: Zero gap</div>
 """, unsafe_allow_html=True)
 
-# Calculate gender gap (Female - Male unemployment rate)
-df_equity = df_filtered.groupby(['year', 'sex'])['unemployment_rate'].mean().reset_index()
-df_equity_pivot = df_equity.pivot(index='year', columns='sex', values='unemployment_rate').reset_index()
+# Calculate gender gap by development tier (Female - Male unemployment rate)
+df_equity = df_filtered.groupby(['year', 'dev_tier', 'sex'])['unemployment_rate'].mean().reset_index()
+df_equity_pivot = df_equity.pivot_table(
+    index=['year', 'dev_tier'], 
+    columns='sex', 
+    values='unemployment_rate'
+).reset_index()
 df_equity_pivot['gender_gap'] = df_equity_pivot['Female'] - df_equity_pivot['Male']
 
-# Create line chart
+# Create line chart with tier breakdown
 fig_equity = go.Figure()
 
-# Add gender gap line with area fill
-fig_equity.add_trace(go.Scatter(
-    x=df_equity_pivot['year'],
-    y=df_equity_pivot['gender_gap'],
-    mode='lines+markers',
-    name='Gender Gap',
-    line=dict(color='#E91E63', width=4),
-    marker=dict(size=10, symbol='circle'),
-    fill='tozeroy',
-    fillcolor='rgba(233, 30, 99, 0.15)',
-    hovertemplate='<b>Year: %{x}</b><br>Gender Gap: %{y:.2f}pp<br>(Female - Male unemployment)<extra></extra>'
-))
+# Color mapping for development tiers
+tier_colors = {
+    'Low Income': '#ff6b6b',
+    'Lower-Middle': '#ffa94d',
+    'Upper-Middle': '#5b9bd5',
+    'High Income': '#51cf66'
+}
+
+# Add a line for each development tier
+for tier in ['Low Income', 'Lower-Middle', 'Upper-Middle', 'High Income']:
+    tier_data = df_equity_pivot[df_equity_pivot['dev_tier'] == tier].sort_values('year')
+    
+    if not tier_data.empty:
+        # Calculate trend direction
+        first_gap = tier_data['gender_gap'].iloc[0]
+        last_gap = tier_data['gender_gap'].iloc[-1]
+        trend = "improving" if abs(last_gap) < abs(first_gap) else "worsening"
+        
+        fig_equity.add_trace(go.Scatter(
+            x=tier_data['year'],
+            y=tier_data['gender_gap'],
+            mode='lines+markers',
+            name=f'{tier} ({trend})',
+            line=dict(color=tier_colors[tier], width=3),
+            marker=dict(size=8, symbol='circle'),
+            hovertemplate=(
+                f'<b>{tier}</b><br>' +
+                'Year: %{x}<br>' +
+                'Gender Gap: %{y:.2f}pp<br>' +
+                '(Female - Male)<extra></extra>'
+            )
+        ))
 
 # Add zero reference line (equity target)
 fig_equity.add_hline(
     y=0, 
     line_dash="dash", 
-    line_color="#ffffff", 
-    line_width=3,
-    annotation_text="⚖ Equity Target",
+    line_color="#2d3748", 
+    line_width=2,
+    annotation_text="Equity Target (Zero Gap)",
     annotation_position="right",
-    annotation=dict(font=dict(size=12, color='#ffffff', weight='bold'))
+    annotation=dict(font=dict(size=11, color='#2d3748', weight='bold'))
 )
 
 # Add COVID period shading
 fig_equity.add_vrect(
     x0=2020, x1=2022,
-    fillcolor="red", opacity=0.1,
+    fillcolor="red", opacity=0.05,
     line_width=0,
-    annotation_text="COVID-19",
+    annotation_text="COVID Impact",
     annotation_position="top left",
-    annotation=dict(font_color="#ffffff", font_size=10)
+    annotation=dict(font_color="#2d3748", font_size=10)
 )
 
+# Add interpretation zones
+max_gap = df_equity_pivot['gender_gap'].max()
+min_gap = df_equity_pivot['gender_gap'].min()
+
+if max_gap > 0:
+    fig_equity.add_annotation(
+        x=2024,
+        y=max_gap * 0.7,
+        text="Female Disadvantage Zone",
+        showarrow=False,
+        font=dict(size=10, color='#718096', style='italic'),
+        xanchor='right',
+        bgcolor='rgba(255, 107, 107, 0.1)',
+        borderpad=4
+    )
+
+if min_gap < 0:
+    fig_equity.add_annotation(
+        x=2024,
+        y=min_gap * 0.7,
+        text="Male Disadvantage Zone",
+        showarrow=False,
+        font=dict(size=10, color='#718096', style='italic'),
+        xanchor='right',
+        bgcolor='rgba(81, 207, 102, 0.1)',
+        borderpad=4
+    )
+
 fig_equity.update_layout(
-    plot_bgcolor='#1f1f1f',
-    paper_bgcolor='#1f1f1f',
-    font_color='#ffffff',
+    plot_bgcolor='#ffffff',
+    paper_bgcolor='#ffffff',
+    font_color='#2d3748',
     xaxis=dict(
         showgrid=True,
-        gridcolor='#3a3a3a',
+        gridcolor='rgba(203, 213, 224, 0.5)',
         title="Year",
-        tickfont=dict(color='#ffffff', size=11),
+        tickfont=dict(color='#4a5568', size=11),
         tickmode='linear',
         tick0=2014,
         dtick=1
     ),
     yaxis=dict(
         showgrid=True,
-        gridcolor='#3a3a3a',
-        title="Gender Gap (percentage points)",
-        tickfont=dict(color='#ffffff', size=11),
+        gridcolor='rgba(203, 213, 224, 0.5)',
+        title=dict(text="Gender Gap (percentage points)", font=dict(color='#2d3748', size=12)),
+        tickfont=dict(color='#4a5568', size=11),
         zeroline=True,
-        zerolinecolor='#ffffff',
-        zerolinewidth=3
+        zerolinecolor='#2d3748',
+        zerolinewidth=2
     ),
-    showlegend=False,
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="center",
+        x=0.5,
+        font=dict(color='#2d3748', size=11),
+        bgcolor='rgba(255, 255, 255, 0.9)',
+        bordercolor='#cbd5e0',
+        borderwidth=1
+    ),
     hovermode='x unified',
-    height=400,
-    margin=dict(l=20, r=20, t=20, b=20)
+    height=450,
+    margin=dict(l=20, r=20, t=60, b=20)
 )
 
 st.plotly_chart(fig_equity, use_container_width=True)
@@ -914,38 +1091,38 @@ st.plotly_chart(fig_equity, use_container_width=True)
 col_insight1, col_insight2, col_insight3 = st.columns(3)
 
 # Calculate key metrics
-overall_2024 = df_equity_pivot[df_equity_pivot['year'] == 2024]['gender_gap'].iloc[0]
-overall_2014 = df_equity_pivot[df_equity_pivot['year'] == 2014]['gender_gap'].iloc[0]
+overall_2024 = df_equity_pivot[df_equity_pivot['year'] == 2024]['gender_gap'].mean()
+overall_2014 = df_equity_pivot[df_equity_pivot['year'] == 2014]['gender_gap'].mean()
 change = overall_2024 - overall_2014
-progress_status = "Improving" if abs(overall_2024) < abs(overall_2014) else "Worsening"
 
 with col_insight1:
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%); padding: 1rem; border-radius: 8px; border-left: 4px solid #E91E63;">
-        <div style="font-size: 0.85rem; color: #a0a0a0; margin-bottom: 0.3rem;">Current Gap (2024)</div>
-        <div style="font-size: 1.8rem; font-weight: bold; color: #ffffff;">{overall_2024:+.2f}pp</div>
-        <div style="font-size: 0.8rem; color: #a0a0a0;">{'Women face higher unemployment' if overall_2024 > 0 else 'Men face higher unemployment'}</div>
+    <div style="background: rgba(233, 30, 99, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #E91E63;">
+        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">Current Gap (2024)</div>
+        <div style="font-size: 1.8rem; font-weight: bold; color: #2d3748;">{overall_2024:+.2f}pp</div>
+        <div style="font-size: 0.8rem; color: #718096;">{'Women face higher unemployment' if overall_2024 > 0 else 'Men face higher unemployment'}</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col_insight2:
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%); padding: 1rem; border-radius: 8px; border-left: 4px solid #5b9bd5;">
-        <div style="font-size: 0.85rem; color: #a0a0a0; margin-bottom: 0.3rem;">10-Year Trend</div>
-        <div style="font-size: 1.8rem; font-weight: bold; color: #ffffff;">{progress_status}</div>
-        <div style="font-size: 0.8rem; color: #a0a0a0;">Change: {change:+.2f}pp since 2014</div>
+    <div style="background: rgba(21, 101, 192, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #1565C0;">
+        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">10-Year Change</div>
+        <div style="font-size: 1.8rem; font-weight: bold; color: #2d3748;">{change:+.2f}pp</div>
+        <div style="font-size: 0.8rem; color: #718096;">{'Gap widening' if abs(change) > 0.1 else 'Relatively stable'}</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col_insight3:
-    # Calculate distance from equity
-    distance_from_equity = abs(overall_2024)
+    # Find most equitable tier
+    tier_gaps_2024 = df_equity_pivot[df_equity_pivot['year'] == 2024].groupby('dev_tier')['gender_gap'].mean()
+    most_equitable = tier_gaps_2024.abs().idxmin()
     
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%); padding: 1rem; border-radius: 8px; border-left: 4px solid #51cf66;">
-        <div style="font-size: 0.85rem; color: #a0a0a0; margin-bottom: 0.3rem;">Distance from Equity</div>
-        <div style="font-size: 1.8rem; font-weight: bold; color: #ffffff;">{distance_from_equity:.2f}pp</div>
-        <div style="font-size: 0.8rem; color: #a0a0a0;">{'Close to equity' if distance_from_equity < 1 else 'Needs improvement'}</div>
+    <div style="background: rgba(81, 207, 102, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #51cf66;">
+        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.3rem;">Most Equitable Tier</div>
+        <div style="font-size: 1.3rem; font-weight: bold; color: #2d3748;">{most_equitable}</div>
+        <div style="font-size: 0.8rem; color: #718096;">Gap: {tier_gaps_2024[most_equitable]:+.2f}pp</div>
     </div>
     """, unsafe_allow_html=True)
 
